@@ -2,6 +2,7 @@ package org.example.duanLianJie.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.duanLianJie.admin.common.convention.result.Result;
+import org.example.duanLianJie.admin.common.convention.result.Results;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 import org.example.duanLianJie.admin.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +22,6 @@ public class UserController {
      */
     @GetMapping("/api/link/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
-        UserRespDTO result = userService.getUserByUsername(username);
-        if (result == null) {
-            return new Result<UserRespDTO>().setCode("-1").setMessage("用户信息不存在");
-        }else {
-            return new Result<UserRespDTO>().setCode("0").setData(result);
-        }
+        return Results.success(userService.getUserByUsername(username));
     }
 }
