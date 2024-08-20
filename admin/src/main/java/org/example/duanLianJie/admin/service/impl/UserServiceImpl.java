@@ -13,14 +13,20 @@ import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 import org.example.duanLianJie.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import static org.example.duanLianJie.admin.common.constant.RedisCacheConstant.LOCK_USER_REGISTER;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
+    private final RedissonClient redissonClient;
+
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> wrapper = Wrappers.lambdaQuery(UserDO.class)
@@ -45,10 +51,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         if (hasusername(requestParam.getUsername())) {
             throw new ClientException("用户名已存在");
         }
-        int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
-        if (inserted < 1) {
-            throw new ClientException("用户已存在");
+        RLock lock = redissonClient.getLock(LOCK_USER_REGISTER + requestParam.getUsername());
+        try {
+            if (lock.tryLock()) {
+                int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
+                if (inserted < 1) {
+                    throw new ClientException("用户已存在");
+                }
+                userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+            }
+            throw new ClientException("用户名已存在");
+        }finally {
+            lock.unlock();
         }
-        userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
     }
 }
