@@ -2,6 +2,7 @@ package org.example.duanLianJie.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.duanLianJie.admin.dao.entity.UserDO;
+import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 
 public interface UserService extends IService<UserDO> {
@@ -18,4 +19,10 @@ public interface UserService extends IService<UserDO> {
      * @return
      */
     Boolean hasusername(String username);
+
+    /**
+     * 用户注册
+     * @param requestParam 请求参数
+     */
+    void register(UserRegisterReqDTO requestParam);
 }

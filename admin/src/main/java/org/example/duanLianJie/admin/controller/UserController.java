@@ -3,11 +3,10 @@ package org.example.duanLianJie.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.duanLianJie.admin.common.convention.result.Result;
 import org.example.duanLianJie.admin.common.convention.result.Results;
+import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 import org.example.duanLianJie.admin.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户管理控制层
@@ -20,13 +19,19 @@ public class UserController {
     /**
      *根据用户名查询用户
      */
-    @GetMapping("/api/link/v1/user/{username}")
+    @GetMapping("/api/short-link/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
         return Results.success(userService.getUserByUsername(username));
     }
 
-    @GetMapping("/api/link/v1/user/has-username")
+    @GetMapping("/api/short-link/v1/user/has-username")
     public Result<Boolean> hasUsername(String username) {
         return Results.success(userService.hasusername(username));
+    }
+
+    @PostMapping("/api/short-link/v1/user")
+    public Result<Void> register(@RequestBody UserRegisterReqDTO requestParam) {
+        userService.register(requestParam);
+        return Results.success();
     }
 }
