@@ -24,4 +24,9 @@ public class UserController {
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
         return Results.success(userService.getUserByUsername(username));
     }
+
+    @GetMapping("/api/link/v1/user/has-username")
+    public Result<Boolean> hasUsername(String username) {
+        return Results.success(userService.hasusername(username));
+    }
 }
