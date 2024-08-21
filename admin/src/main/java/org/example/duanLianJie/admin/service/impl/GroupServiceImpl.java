@@ -1,5 +1,6 @@
 package org.example.duanLianJie.admin.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,9 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.duanLianJie.admin.dao.entity.GroupDO;
 import org.example.duanLianJie.admin.dao.mapper.GroupMapper;
 import org.example.duanLianJie.admin.dto.req.GroupSaveReqDTO;
+import org.example.duanLianJie.admin.dto.resp.GroupRespDTO;
 import org.example.duanLianJie.admin.service.GroupService;
 import org.example.duanLianJie.admin.util.RandomGenerator;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +44,16 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                 .eq(GroupDO::getDelFlag, 0);
         GroupDO groupDO = baseMapper.selectOne(wrapper);
         return groupDO != null;
+    }
+
+    @Override
+    public List<GroupRespDTO> groupList() {
+        LambdaQueryWrapper<GroupDO> wrapper = Wrappers.lambdaQuery(GroupDO.class)
+                .eq(GroupDO::getUsername, "zhangsan")
+                .eq(GroupDO::getDelFlag, 0)
+                .orderByDesc(GroupDO::getSortOrder, GroupDO::getUpdateTime);
+        List<GroupDO> groupDOS = baseMapper.selectList(wrapper);
+        List<GroupRespDTO> groupRespDTOS = BeanUtil.copyToList(groupDOS, GroupRespDTO.class);
+        return groupRespDTOS;
     }
 }
