@@ -2,8 +2,10 @@ package org.example.duanLianJie.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.duanLianJie.admin.dao.entity.UserDO;
+import org.example.duanLianJie.admin.dto.req.UserLoginReqDTO;
 import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
 import org.example.duanLianJie.admin.dto.req.UserUpdateReqDTO;
+import org.example.duanLianJie.admin.dto.resp.UserLoginRespDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 
 public interface UserService extends IService<UserDO> {
@@ -33,4 +35,18 @@ public interface UserService extends IService<UserDO> {
      * @param requestParam 用户请求参数
      */
     void updata(UserUpdateReqDTO requestParam);
+
+    /**
+     * 用户登录
+     * @param requestParam
+     * @return
+     */
+    UserLoginRespDTO login(UserLoginReqDTO requestParam);
+
+    /**
+     * 判断用户是否登录
+     * @param token
+     * @return
+     */
+    Boolean checkLogin(String username, String token);
 }
