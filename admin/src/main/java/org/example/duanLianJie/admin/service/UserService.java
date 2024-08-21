@@ -3,6 +3,7 @@ package org.example.duanLianJie.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.duanLianJie.admin.dao.entity.UserDO;
 import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
+import org.example.duanLianJie.admin.dto.req.UserUpdateReqDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 
 public interface UserService extends IService<UserDO> {
@@ -25,4 +26,11 @@ public interface UserService extends IService<UserDO> {
      * @param requestParam 请求参数
      */
     void register(UserRegisterReqDTO requestParam);
+
+    /**
+     * 根据用户名修改用户信息
+     *
+     * @param requestParam 用户请求参数
+     */
+    void updata(UserUpdateReqDTO requestParam);
 }

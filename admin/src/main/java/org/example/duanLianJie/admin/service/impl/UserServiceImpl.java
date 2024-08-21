@@ -2,6 +2,7 @@ package org.example.duanLianJie.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.example.duanLianJie.admin.common.convention.exception.ClientException
 import org.example.duanLianJie.admin.dao.entity.UserDO;
 import org.example.duanLianJie.admin.dao.mapper.UserMapper;
 import org.example.duanLianJie.admin.dto.req.UserRegisterReqDTO;
+import org.example.duanLianJie.admin.dto.req.UserUpdateReqDTO;
 import org.example.duanLianJie.admin.dto.resp.UserRespDTO;
 import org.example.duanLianJie.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
@@ -65,5 +67,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void updata(UserUpdateReqDTO requestParam) {
+        // TODO: 2024/8/21 判断用户是否为当前登录用户
+        LambdaUpdateWrapper<UserDO> updateWrapper = Wrappers.lambdaUpdate(UserDO.class)
+                .eq(UserDO::getUsername, requestParam.getUsername());
+        baseMapper.update(BeanUtil.toBean(requestParam, UserDO.class), updateWrapper);
     }
 }
