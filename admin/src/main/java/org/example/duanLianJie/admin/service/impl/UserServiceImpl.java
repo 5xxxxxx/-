@@ -59,6 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                     throw new ClientException("用户已存在");
                 }
                 userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+                return;
             }
             throw new ClientException("用户名已存在");
         }finally {
