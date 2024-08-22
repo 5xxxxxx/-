@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.duanLianJie.admin.common.convention.result.Result;
 import org.example.duanLianJie.admin.common.convention.result.Results;
 import org.example.duanLianJie.admin.dto.req.GroupSaveReqDTO;
+import org.example.duanLianJie.admin.dto.req.GroupUpdateDTO;
 import org.example.duanLianJie.admin.dto.resp.GroupRespDTO;
 import org.example.duanLianJie.admin.service.GroupService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,4 +37,16 @@ public class GroupController {
     public Result<List<GroupRespDTO>> groupList() {
         return Results.success(groupService.groupList());
     }
+
+    /**
+     * 修改短链接分组
+     * @param requestParam
+     * @return
+     */
+    @PutMapping("/api/short-link/v1/group")
+    Result<Void> update(@RequestBody GroupUpdateDTO requestParam) {
+        groupService.update(requestParam);
+        return Results.success();
+    }
+
 }
