@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.duanLianJie.admin.common.convention.result.Result;
 import org.example.duanLianJie.admin.common.convention.result.Results;
 import org.example.duanLianJie.admin.dto.req.GroupSaveReqDTO;
+import org.example.duanLianJie.admin.dto.req.GroupSortReqDTO;
 import org.example.duanLianJie.admin.dto.req.GroupUpdateDTO;
 import org.example.duanLianJie.admin.dto.resp.GroupRespDTO;
 import org.example.duanLianJie.admin.service.GroupService;
@@ -44,7 +45,7 @@ public class GroupController {
      * @return
      */
     @PutMapping("/api/short-link/v1/group")
-    Result<Void> update(@RequestBody GroupUpdateDTO requestParam) {
+    public Result<Void> update(@RequestBody GroupUpdateDTO requestParam) {
         groupService.update(requestParam);
         return Results.success();
     }
@@ -55,8 +56,14 @@ public class GroupController {
      * @return
      */
     @DeleteMapping ("/api/short-link/v1/group")
-    Result<Void> delete(@RequestParam String gid) {
+    public Result<Void> delete(@RequestParam String gid) {
         groupService.delete(gid);
+        return Results.success();
+    }
+
+    @PostMapping("/api/short-link/v1/group/sort")
+    public Result<Void> sort(@RequestBody List<GroupSortReqDTO> requestParam) {
+        groupService.sort(requestParam);
         return Results.success();
     }
 

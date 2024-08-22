@@ -10,6 +10,7 @@ import org.example.duanLianJie.admin.common.biz.user.UserContext;
 import org.example.duanLianJie.admin.dao.entity.GroupDO;
 import org.example.duanLianJie.admin.dao.mapper.GroupMapper;
 import org.example.duanLianJie.admin.dto.req.GroupSaveReqDTO;
+import org.example.duanLianJie.admin.dto.req.GroupSortReqDTO;
 import org.example.duanLianJie.admin.dto.req.GroupUpdateDTO;
 import org.example.duanLianJie.admin.dto.resp.GroupRespDTO;
 import org.example.duanLianJie.admin.service.GroupService;
@@ -81,5 +82,19 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
         GroupDO groupDO = new GroupDO();
         groupDO.setDelFlag(1);
         baseMapper.update(groupDO, wrapper);
+    }
+
+    @Override
+    public void sort(List<GroupSortReqDTO> requestParam) {
+        requestParam.forEach(each -> {
+            LambdaUpdateWrapper<GroupDO> wrapper = Wrappers.lambdaUpdate(GroupDO.class)
+                    .eq(GroupDO::getUsername, UserContext.getUsername())
+                    .eq(GroupDO::getGid, each.getGid())
+                    .eq(GroupDO::getDelFlag, 0);
+            GroupDO groupDO = GroupDO.builder()
+                    .sortOrder(each.getSortOrder())
+                    .build();
+            baseMapper.update(groupDO, wrapper);
+        });
     }
 }

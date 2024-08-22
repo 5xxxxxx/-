@@ -3,6 +3,7 @@ package org.example.duanLianJie.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.duanLianJie.admin.dao.entity.GroupDO;
 import org.example.duanLianJie.admin.dto.req.GroupSaveReqDTO;
+import org.example.duanLianJie.admin.dto.req.GroupSortReqDTO;
 import org.example.duanLianJie.admin.dto.req.GroupUpdateDTO;
 import org.example.duanLianJie.admin.dto.resp.GroupRespDTO;
 
@@ -32,4 +33,10 @@ public interface GroupService extends IService<GroupDO> {
      * @param gid
      */
     void delete(String gid);
+
+    /**
+     * 短链接排序
+     * @param requestParam
+     */
+    void sort(List<GroupSortReqDTO> requestParam);
 }
