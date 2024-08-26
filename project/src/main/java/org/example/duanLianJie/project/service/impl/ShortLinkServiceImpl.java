@@ -2,6 +2,7 @@ package org.example.duanLianJie.project.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.example.duanLianJie.project.common.convention.exception.ServiceExcept
 import org.example.duanLianJie.project.dao.entity.ShortLinkDO;
 import org.example.duanLianJie.project.dao.mapper.ShortLinkMapper;
 import org.example.duanLianJie.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.duanLianJie.project.dto.req.ShortLinkPageReqDTO;
 import org.example.duanLianJie.project.dto.resp.ShortLinkCreateRespDTO;
+import org.example.duanLianJie.project.dto.resp.ShortLinkPageRespDTO;
 import org.example.duanLianJie.project.service.ShortLinkService;
 import org.example.duanLianJie.project.toolkit.HashUtil;
 import org.redisson.api.RBloomFilter;
@@ -48,6 +51,16 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .gid(shortLinkDO.getGid())
                 .originUrl(shortLinkDO.getOriginUrl())
                 .build();
+    }
+
+    @Override
+    public IPage<ShortLinkPageRespDTO> shortLinkPage(ShortLinkPageReqDTO requestParam) {
+        LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
+                .eq(ShortLinkDO::getGid, requestParam.getGid())
+                .eq(ShortLinkDO::getDelFlag, 0)
+                .eq(ShortLinkDO::getEnableStatus, 0);
+        IPage<ShortLinkDO> resultPage = baseMapper.selectPage(requestParam, queryWrapper);
+        return resultPage.convert(each -> BeanUtil.toBean(each, ShortLinkPageRespDTO.class));
     }
 
     public String generateSuffix(ShortLinkCreateReqDTO requestParam) {

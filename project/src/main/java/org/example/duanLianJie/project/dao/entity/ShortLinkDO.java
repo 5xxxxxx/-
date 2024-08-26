@@ -78,4 +78,9 @@ public class ShortLinkDO extends Basedata {
     @TableField("`describe`")
     private String describe;
 
+    /**
+     * 网站图标
+     */
+    private String favicon;
+
 }
